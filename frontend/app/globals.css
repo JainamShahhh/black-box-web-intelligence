@@ -1,0 +1,335 @@
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  /* Dark cyberpunk theme with research aesthetics */
+  --background: #0a0e14;
+  --background-secondary: #0f1419;
+  --foreground: #e6e6e6;
+  
+  --card: #12171e;
+  --card-hover: #181f28;
+  --border: #1e2732;
+  
+  --primary: #00d4ff;
+  --primary-light: #39e0ff;
+  --primary-dark: #00a8cc;
+  
+  --secondary: #ff6b9d;
+  --accent: #c792ea;
+  
+  --success: #00e676;
+  --warning: #ffab00;
+  --error: #ff5252;
+  
+  --muted: #4a5568;
+}
+
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+html,
+body {
+  max-width: 100vw;
+  overflow-x: hidden;
+  font-family: 'Space Grotesk', system-ui, sans-serif;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  line-height: 1.6;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--background);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--muted);
+}
+
+/* Utility classes */
+.bg-background { background-color: var(--background); }
+.bg-card { background-color: var(--card); }
+.text-foreground { color: var(--foreground); }
+.text-primary { color: var(--primary); }
+.border-border { border-color: var(--border); }
+.bg-primary { background-color: var(--primary); }
+.text-background { color: var(--background); }
+
+/* Typography */
+.font-display {
+  font-family: 'Space Grotesk', sans-serif;
+}
+
+.font-mono {
+  font-family: 'JetBrains Mono', monospace;
+}
+
+/* Glow effects */
+.glow-primary {
+  box-shadow: 0 0 20px rgba(0, 212, 255, 0.3);
+}
+
+.glow-success {
+  box-shadow: 0 0 20px rgba(0, 230, 118, 0.3);
+}
+
+.glow-error {
+  box-shadow: 0 0 20px rgba(255, 82, 82, 0.3);
+}
+
+/* Grid background pattern */
+.cyber-grid {
+  background-image: 
+    linear-gradient(rgba(30, 39, 50, 0.5) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(30, 39, 50, 0.5) 1px, transparent 1px);
+  background-size: 50px 50px;
+  background-position: center center;
+}
+
+/* Animated gradient text */
+.gradient-text {
+  background: linear-gradient(135deg, var(--primary), var(--accent), var(--secondary));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Card hover effect */
+.card-hover {
+  transition: all 0.2s ease;
+}
+
+.card-hover:hover {
+  background-color: var(--card-hover);
+  border-color: var(--primary);
+  transform: translateY(-2px);
+}
+
+/* Pulse animation */
+@keyframes pulse-glow {
+  0%, 100% {
+    box-shadow: 0 0 5px var(--primary);
+  }
+  50% {
+    box-shadow: 0 0 20px var(--primary), 0 0 30px var(--primary);
+  }
+}
+
+.animate-pulse-glow {
+  animation: pulse-glow 2s ease-in-out infinite;
+}
+
+/* Status indicators */
+.status-running {
+  background: var(--success);
+  animation: pulse 2s infinite;
+}
+
+.status-idle {
+  background: var(--muted);
+}
+
+.status-error {
+  background: var(--error);
+}
+
+/* Code blocks */
+pre, code {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.875rem;
+}
+
+pre {
+  background: var(--background);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 1rem;
+  overflow-x: auto;
+}
+
+/* Tab styling */
+.tab-active {
+  border-bottom: 2px solid var(--primary);
+  color: var(--primary);
+}
+
+/* Progress bar animation */
+@keyframes progress-shine {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(100%);
+  }
+}
+
+.progress-animated::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.2),
+    transparent
+  );
+  animation: progress-shine 2s infinite;
+}
+
+/* Scientific loop visualization */
+.loop-phase {
+  transition: all 0.5s ease;
+}
+
+.loop-phase.active {
+  transform: scale(1.1);
+  box-shadow: 0 0 20px var(--primary);
+}
+
+/* Confidence meter colors */
+.confidence-high { color: var(--success); }
+.confidence-medium { color: var(--warning); }
+.confidence-low { color: var(--error); }
+
+/* Agent status cards */
+.agent-card {
+  background: linear-gradient(135deg, var(--card) 0%, var(--background) 100%);
+  border: 1px solid var(--border);
+  transition: all 0.3s ease;
+}
+
+.agent-card:hover {
+  border-color: var(--primary);
+  box-shadow: 0 4px 20px rgba(0, 212, 255, 0.1);
+}
+
+/* Data table styling */
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.data-table th,
+.data-table td {
+  padding: 0.75rem;
+  text-align: left;
+  border-bottom: 1px solid var(--border);
+}
+
+.data-table th {
+  font-weight: 600;
+  color: var(--foreground);
+  background: var(--background);
+}
+
+.data-table tr:hover {
+  background: var(--card-hover);
+}
+
+/* Badge styling */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.25rem 0.5rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  border-radius: 9999px;
+}
+
+.badge-success {
+  background: rgba(0, 230, 118, 0.2);
+  color: var(--success);
+}
+
+.badge-warning {
+  background: rgba(255, 171, 0, 0.2);
+  color: var(--warning);
+}
+
+.badge-error {
+  background: rgba(255, 82, 82, 0.2);
+  color: var(--error);
+}
+
+.badge-primary {
+  background: rgba(0, 212, 255, 0.2);
+  color: var(--primary);
+}
+
+/* JSON syntax highlighting */
+.json-key { color: var(--primary); }
+.json-string { color: var(--success); }
+.json-number { color: var(--warning); }
+.json-boolean { color: var(--secondary); }
+.json-null { color: var(--muted); }
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .cyber-grid {
+    background-size: 30px 30px;
+  }
+}
+
+/* Animation for loading states */
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.loading-shimmer {
+  background: linear-gradient(
+    90deg,
+    var(--card) 25%,
+    var(--card-hover) 50%,
+    var(--card) 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+/* Focus states */
+input:focus,
+button:focus,
+select:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 2px rgba(0, 212, 255, 0.2);
+}
+
+/* Transitions */
+.transition-colors {
+  transition-property: color, background-color, border-color;
+  transition-duration: 200ms;
+}
+
+.transition-all {
+  transition-property: all;
+  transition-duration: 200ms;
+}

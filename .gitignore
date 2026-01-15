@@ -1,0 +1,48 @@
+# Black-Box Web Intelligence
+# © 2026 Jainam. All Rights Reserved.
+# PROPRIETARY AND CONFIDENTIAL
+
+# Dependencies
+node_modules/
+venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# Environment
+.env
+.env.local
+*.env
+
+# Data files
+*.db
+*.sqlite
+data/
+chroma_data/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+.DS_Store
+
+# Build
+.next/
+out/
+build/
+dist/
+*.egg-info/
+
+# Logs
+*.log
+logs/
+
+# Screenshots (keep demo ones)
+demo_screenshots/*.png
+!demo_screenshots/.gitkeep
+
+# Secrets
+*.pem
+*.key
+secrets/
