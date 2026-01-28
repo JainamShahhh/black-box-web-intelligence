@@ -1,0 +1,1210 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Black-Box Web Intelligence | AI Tinkerers</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Inter:wght@400;600;800&display=swap"
+        rel="stylesheet">
+
+    <style>
+        :root {
+            --bg: #0a0a0f;
+            --card: #12121a;
+            --cyan: #00ffd5;
+            --purple: #a855f7;
+            --green: #10b981;
+            --orange: #f59e0b;
+            --red: #ef4444;
+            --text: #e2e8f0;
+            --dim: #64748b;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            overflow-x: hidden;
+        }
+
+        /* Keyboard hint */
+        .keyboard-hint {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: var(--card);
+            border: 1px solid rgba(0, 255, 213, 0.3);
+            border-radius: 12px;
+            padding: 0.75rem 1rem;
+            z-index: 9999;
+            font-size: 0.8rem;
+            color: var(--dim);
+        }
+
+        .keyboard-hint kbd {
+            background: rgba(0, 255, 213, 0.2);
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            color: var(--cyan);
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        /* Animated background */
+        .grid-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: linear-gradient(rgba(0, 255, 213, 0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 255, 213, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            animation: gridMove 20s linear infinite;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        @keyframes gridMove {
+            to {
+                transform: translate(50px, 50px);
+            }
+        }
+
+        .glow-orb {
+            position: fixed;
+            width: 400px;
+            height: 400px;
+            border-radius: 50%;
+            filter: blur(100px);
+            opacity: 0.15;
+            pointer-events: none;
+            z-index: 0;
+            animation: orbFloat 10s ease-in-out infinite;
+        }
+
+        .glow-orb.cyan {
+            background: var(--cyan);
+            top: 20%;
+            left: 10%;
+        }
+
+        .glow-orb.purple {
+            background: var(--purple);
+            bottom: 20%;
+            right: 10%;
+            animation-delay: 5s;
+        }
+
+        @keyframes orbFloat {
+
+            0%,
+            100% {
+                transform: translate(0, 0);
+            }
+
+            50% {
+                transform: translate(50px, 30px);
+            }
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 1rem 2rem;
+            background: rgba(10, 10, 15, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(0, 255, 213, 0.1);
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-family: 'JetBrains Mono', monospace;
+            color: var(--cyan);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--cyan), var(--purple));
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: var(--bg);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                box-shadow: 0 0 0 0 rgba(0, 255, 213, 0.4);
+            }
+
+            50% {
+                box-shadow: 0 0 20px 10px rgba(0, 255, 213, 0);
+            }
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        nav a {
+            color: var(--dim);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        nav a:hover {
+            color: var(--cyan);
+        }
+
+        nav a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--cyan);
+            transition: width 0.3s;
+        }
+
+        nav a:hover::after {
+            width: 100%;
+        }
+
+        /* Sections */
+        section {
+            min-height: 100vh;
+            padding: 100px 5%;
+            position: relative;
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .section-number {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+            color: var(--cyan);
+            margin-bottom: 1rem;
+            letter-spacing: 3px;
+            opacity: 0;
+            transform: translateX(-20px);
+            transition: all 0.6s;
+        }
+
+        h1 {
+            font-size: 4rem;
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+        }
+
+        h2 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+        }
+
+        h3 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--cyan);
+        }
+
+        .gradient-text {
+            background: linear-gradient(135deg, var(--cyan), var(--purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .subtitle {
+            font-size: 1.25rem;
+            color: var(--dim);
+            max-width: 600px;
+            line-height: 1.8;
+        }
+
+        /* Hero */
+        #hero {
+            text-align: center;
+            align-items: center;
+        }
+
+        .hero-badge {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            background: rgba(0, 255, 213, 0.1);
+            border: 1px solid rgba(0, 255, 213, 0.3);
+            border-radius: 50px;
+            font-size: 0.85rem;
+            color: var(--cyan);
+            margin-bottom: 2rem;
+            animation: badgePulse 2s infinite;
+        }
+
+        @keyframes badgePulse {
+
+            0%,
+            100% {
+                box-shadow: 0 0 0 0 rgba(0, 255, 213, 0.3);
+            }
+
+            50% {
+                box-shadow: 0 0 15px 5px rgba(0, 255, 213, 0);
+            }
+        }
+
+        .terminal-demo {
+            margin-top: 3rem;
+            background: var(--card);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 2rem;
+            max-width: 800px;
+            text-align: left;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+        }
+
+        .terminal-header {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 1rem;
+        }
+
+        .terminal-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+
+        .terminal-dot.red {
+            background: #ff5f56;
+        }
+
+        .terminal-dot.yellow {
+            background: #ffbd2e;
+        }
+
+        .terminal-dot.green {
+            background: #27ca40;
+        }
+
+        .cmd {
+            color: var(--green);
+        }
+
+        .output {
+            color: var(--dim);
+        }
+
+        .highlight {
+            color: var(--cyan);
+        }
+
+        .typing-line {
+            overflow: hidden;
+            white-space: nowrap;
+            border-right: 2px solid var(--cyan);
+            animation: typing 2s steps(40) forwards, blink 0.5s infinite;
+        }
+
+        @keyframes typing {
+            from {
+                width: 0;
+            }
+
+            to {
+                width: 100%;
+            }
+        }
+
+        @keyframes blink {
+            50% {
+                border-color: transparent;
+            }
+        }
+
+        /* Cards */
+        .problem-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .problem-card {
+            background: var(--card);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 2rem;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            cursor: pointer;
+        }
+
+        .problem-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            border-color: var(--cyan);
+            box-shadow: 0 20px 40px rgba(0, 255, 213, 0.1);
+        }
+
+        .problem-card .icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            transition: transform 0.3s;
+        }
+
+        .problem-card:hover .icon {
+            transform: scale(1.2) rotate(10deg);
+        }
+
+        /* Architecture */
+        .architecture-diagram {
+            background: var(--card);
+            border: 1px solid rgba(0, 255, 213, 0.2);
+            border-radius: 16px;
+            padding: 3rem;
+            margin-top: 2rem;
+        }
+
+        .loop-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+
+        .phase-box {
+            background: rgba(0, 255, 213, 0.1);
+            border: 2px solid var(--cyan);
+            border-radius: 12px;
+            padding: 1.5rem 2rem;
+            text-align: center;
+            min-width: 140px;
+            transition: all 0.4s;
+            position: relative;
+            cursor: pointer;
+        }
+
+        .phase-box:hover {
+            transform: scale(1.15) rotate(-2deg);
+            background: rgba(0, 255, 213, 0.2);
+            box-shadow: 0 0 40px rgba(0, 255, 213, 0.4);
+        }
+
+        .phase-box .number {
+            position: absolute;
+            top: -12px;
+            left: -12px;
+            width: 28px;
+            height: 28px;
+            background: var(--cyan);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--bg);
+            font-weight: bold;
+            font-size: 0.9rem;
+        }
+
+        .phase-box .name {
+            font-weight: bold;
+            color: var(--cyan);
+            font-size: 1.1rem;
+        }
+
+        .phase-box .agent {
+            color: var(--dim);
+            font-size: 0.8rem;
+            margin-top: 0.5rem;
+        }
+
+        .arrow {
+            color: var(--cyan);
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+            animation: arrowPulse 1s infinite;
+        }
+
+        @keyframes arrowPulse {
+
+            0%,
+            100% {
+                opacity: 0.5;
+                transform: translateX(0);
+            }
+
+            50% {
+                opacity: 1;
+                transform: translateX(5px);
+            }
+        }
+
+        /* Code */
+        .code-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            align-items: start;
+            margin-top: 2rem;
+        }
+
+        .code-block {
+            background: #1a1a2e;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            overflow: hidden;
+            transition: all 0.3s;
+        }
+
+        .code-block:hover {
+            border-color: var(--cyan);
+            box-shadow: 0 0 30px rgba(0, 255, 213, 0.1);
+        }
+
+        .code-header {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 0.75rem 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .code-header .dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+        }
+
+        .code-header .filename {
+            color: var(--dim);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+        }
+
+        pre {
+            padding: 1.5rem;
+            overflow-x: auto;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            line-height: 1.6;
+        }
+
+        .keyword {
+            color: var(--purple);
+        }
+
+        .function {
+            color: var(--cyan);
+        }
+
+        .string {
+            color: var(--green);
+        }
+
+        .comment {
+            color: var(--dim);
+        }
+
+        .number {
+            color: var(--orange);
+        }
+
+        .gotcha {
+            background: rgba(245, 158, 11, 0.1);
+            border-left: 4px solid var(--orange);
+            padding: 1rem;
+            border-radius: 0 8px 8px 0;
+            margin-top: 1rem;
+        }
+
+        .gotcha-title {
+            color: var(--orange);
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Stats */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .stat-card {
+            background: var(--card);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.4s;
+        }
+
+        .stat-card:hover {
+            border-color: var(--cyan);
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0, 255, 213, 0.15);
+        }
+
+        .stat-value {
+            font-size: 3rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--cyan), var(--purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .stat-label {
+            color: var(--dim);
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+        }
+
+        .stat-card .counter {
+            display: inline-block;
+        }
+
+        /* Storage */
+        .storage-comparison {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .storage-card {
+            background: var(--card);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.4s;
+        }
+
+        .storage-card:hover {
+            transform: scale(1.05);
+            border-color: var(--cyan);
+        }
+
+        .storage-card .icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .storage-card h4 {
+            color: var(--cyan);
+            margin-bottom: 1rem;
+        }
+
+        .storage-card .purpose {
+            color: var(--dim);
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        .storage-card .why {
+            background: rgba(0, 255, 213, 0.1);
+            padding: 1rem;
+            border-radius: 8px;
+            font-size: 0.85rem;
+        }
+
+        /* Security */
+        .security-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .security-finding {
+            background: var(--card);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            border-radius: 12px;
+            padding: 1.5rem;
+            display: flex;
+            gap: 1rem;
+            transition: all 0.3s;
+        }
+
+        .security-finding:hover {
+            transform: translateX(10px);
+            border-color: var(--red);
+        }
+
+        .severity {
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            height: fit-content;
+        }
+
+        .severity.high {
+            background: rgba(239, 68, 68, 0.2);
+            color: var(--red);
+        }
+
+        .severity.medium {
+            background: rgba(245, 158, 11, 0.2);
+            color: var(--orange);
+        }
+
+        .severity.low {
+            background: rgba(16, 185, 129, 0.2);
+            color: var(--green);
+        }
+
+        /* Q&A */
+        .qa-grid {
+            display: grid;
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .qa-item {
+            background: var(--card);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            overflow: hidden;
+            transition: all 0.3s;
+        }
+
+        .qa-item:hover {
+            border-color: rgba(0, 255, 213, 0.3);
+        }
+
+        .qa-item.open {
+            border-color: var(--cyan);
+            box-shadow: 0 0 20px rgba(0, 255, 213, 0.1);
+        }
+
+        .question {
+            padding: 1.5rem;
+            background: rgba(0, 255, 213, 0.05);
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s;
+            user-select: none;
+        }
+
+        .question:hover {
+            background: rgba(0, 255, 213, 0.1);
+        }
+
+        .question .arr {
+            transition: transform 0.3s;
+            font-size: 0.8rem;
+            color: var(--cyan);
+        }
+
+        .answer {
+            padding: 0 1.5rem;
+            color: var(--dim);
+            line-height: 1.8;
+            max-height: 0;
+            overflow: hidden;
+            transition: all 0.4s ease;
+            border-top: 0 solid rgba(255, 255, 255, 0.1);
+        }
+
+        .qa-item.open .answer {
+            max-height: 300px;
+            padding: 1.5rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .qa-item.open .question .arr {
+            transform: rotate(180deg);
+        }
+
+        /* Footer */
+        footer {
+            padding: 4rem 5%;
+            text-align: center;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .cta-button {
+            display: inline-block;
+            padding: 1rem 2rem;
+            background: linear-gradient(135deg, var(--cyan), var(--purple));
+            color: var(--bg);
+            font-weight: bold;
+            text-decoration: none;
+            border-radius: 50px;
+            transition: all 0.3s;
+        }
+
+        .cta-button:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 40px rgba(0, 255, 213, 0.5);
+        }
+
+        /* Scroll animations */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: opacity 0.8s, transform 0.8s;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .fade-in.visible .section-number {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        /* Scroll indicator */
+        .scroll-indicator {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: var(--cyan);
+            font-size: 0.8rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+            opacity: 0.7;
+            animation: bounce 2s infinite;
+            z-index: 100;
+        }
+
+        @keyframes bounce {
+
+            0%,
+            100% {
+                transform: translateX(-50%) translateY(0);
+            }
+
+            50% {
+                transform: translateX(-50%) translateY(-10px);
+            }
+        }
+
+        @media (max-width:1024px) {
+            h1 {
+                font-size: 2.5rem;
+            }
+
+            .problem-grid,
+            .code-section,
+            .storage-comparison,
+            .security-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="grid-bg"></div>
+    <div class="glow-orb cyan"></div>
+    <div class="glow-orb purple"></div>
+
+    <!-- Keyboard hint -->
+    <div class="keyboard-hint">
+        Use <kbd>↑</kbd> <kbd>↓</kbd> or <kbd>Space</kbd> to navigate
+    </div>
+
+    <nav>
+        <div class="logo">
+            <div class="logo-icon">B</div><span>Black-Box Web Intel</span>
+        </div>
+        <ul>
+            <li><a href="#problem">Problem</a></li>
+            <li><a href="#architecture">Architecture</a></li>
+            <li><a href="#deep-dive">Code</a></li>
+            <li><a href="#security">Security</a></li>
+            <li><a href="#qa">Q&A</a></li>
+        </ul>
+    </nav>
+
+    <div class="scroll-indicator">
+        <span>Scroll to explore</span>
+        <span>↓</span>
+    </div>
+
+    <!-- HERO -->
+    <section id="hero">
+        <div class="hero-badge">🔬 AI Tinkerers Edmonton</div>
+        <h1 class="fade-in"><span class="gradient-text">Black-Box</span><br>Web Intelligence</h1>
+        <p class="subtitle fade-in">Multi-agent system that reverse-engineers APIs through autonomous UI exploration</p>
+        <div class="terminal-demo fade-in">
+            <div class="terminal-header">
+                <div class="terminal-dot red"></div>
+                <div class="terminal-dot yellow"></div>
+                <div class="terminal-dot green"></div>
+            </div>
+            <div class="cmd">$ black-box-intel analyze https://pokeapi.co</div>
+            <div class="output"><br>
+                <span class="highlight">[EXPLORE]</span> Navigator clicking "Get API" button...<br>
+                <span class="highlight">[OBSERVE]</span> Captured: GET /api/v2/pokemon/1 → 200<br>
+                <span class="highlight">[INFER]</span> Schema: {id: int, name: str, types: array}<br>
+                <span class="highlight">[CRITIQUE]</span> "What about error cases?"<br>
+                <span class="highlight">[PROBE]</span> Testing: /api/v2/pokemon/-1 → 404 ✓<br>
+                <span class="highlight">[UPDATE]</span> Confidence: 75% → 89%<br><br>
+                <span style="color:#10b981;">✓ Found 12 endpoints, 3 vulnerabilities</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- PROBLEM -->
+    <section id="problem">
+        <div class="section-number">01 // THE PROBLEM</div>
+        <h2 class="fade-in">Black-Box API Reverse Engineering</h2>
+        <p class="subtitle fade-in">Given just a URL—no source code, no docs—can an AI figure out the entire backend?
+        </p>
+        <div class="problem-grid fade-in">
+            <div class="problem-card">
+                <div class="icon">🔍</div>
+                <h3>What endpoints exist?</h3>
+                <p style="color:var(--dim)">Discover /api/users, /api/products, hidden admin routes</p>
+            </div>
+            <div class="problem-card">
+                <div class="icon">📋</div>
+                <h3>What's the schema?</h3>
+                <p style="color:var(--dim)">Infer request/response JSON structure automatically</p>
+            </div>
+            <div class="problem-card">
+                <div class="icon">🔐</div>
+                <h3>What auth is used?</h3>
+                <p style="color:var(--dim)">Detect JWT, sessions, API keys, OAuth flows</p>
+            </div>
+            <div class="problem-card">
+                <div class="icon">⚠️</div>
+                <h3>Are there vulnerabilities?</h3>
+                <p style="color:var(--dim)">OWASP Top 10, misconfigurations, exposed secrets</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ARCHITECTURE -->
+    <section id="architecture">
+        <div class="section-number">02 // ARCHITECTURE</div>
+        <h2 class="fade-in">The Agentic <span class="gradient-text">Scientific Loop</span></h2>
+        <p class="subtitle fade-in">Six phases, six agents. It's the scientific method—form hypotheses, test them,
+            update beliefs.</p>
+        <div class="architecture-diagram fade-in">
+            <div class="loop-container">
+                <div class="phase-box">
+                    <div class="number">1</div>
+                    <div class="name">EXPLORE</div>
+                    <div class="agent">Navigator</div>
+                </div>
+                <div class="arrow">→</div>
+                <div class="phase-box">
+                    <div class="number">2</div>
+                    <div class="name">OBSERVE</div>
+                    <div class="agent">Interceptor</div>
+                </div>
+                <div class="arrow">→</div>
+                <div class="phase-box">
+                    <div class="number">3</div>
+                    <div class="name">INFER</div>
+                    <div class="agent">Analyst</div>
+                </div>
+                <div class="arrow">→</div>
+                <div class="phase-box">
+                    <div class="number">4</div>
+                    <div class="name">CRITIQUE</div>
+                    <div class="agent">Critic</div>
+                </div>
+                <div class="arrow">→</div>
+                <div class="phase-box">
+                    <div class="number">5</div>
+                    <div class="name">PROBE</div>
+                    <div class="agent">Verifier</div>
+                </div>
+                <div class="arrow">→</div>
+                <div class="phase-box">
+                    <div class="number">6</div>
+                    <div class="name">UPDATE</div>
+                    <div class="agent">Memory</div>
+                </div>
+            </div>
+            <p style="text-align:center;color:var(--dim);margin-top:2rem;">↻ Loops until confidence converges (20-50
+                iterations)</p>
+        </div>
+    </section>
+
+    <!-- CDP DEEP DIVE -->
+    <section id="deep-dive">
+        <div class="section-number">03 // NETWORK INTERCEPTION</div>
+        <h2 class="fade-in">Chrome DevTools Protocol <span class="gradient-text">Deep Dive</span></h2>
+        <div class="code-section fade-in">
+            <div class="code-block">
+                <div class="code-header">
+                    <div class="dot" style="background:#ff5f56"></div>
+                    <div class="dot" style="background:#ffbd2e"></div>
+                    <div class="dot" style="background:#27ca40"></div><span class="filename">browser/manager.py</span>
+                </div>
+                <pre><span class="comment"># Enable Chrome DevTools Protocol</span>
+cdp = <span class="keyword">await</span> page.context.new_cdp_session(page)
+<span class="keyword">await</span> cdp.send(<span class="string">"Network.enable"</span>)
+
+<span class="comment"># Capture every response WITH body</span>
+cdp.on(<span class="string">"Network.responseReceived"</span>, handle)
+
+<span class="keyword">async def</span> <span class="function">handle</span>(event):
+    body = <span class="keyword">await</span> cdp.send(
+        <span class="string">"Network.getResponseBody"</span>,
+        {<span class="string">"requestId"</span>: event[<span class="string">"requestId"</span>]}
+    )
+    <span class="keyword">if</span> is_api_call(url):
+        <span class="keyword">await</span> store(Observation(url, body))</pre>
+            </div>
+            <div>
+                <h3>Why CDP?</h3>
+                <p style="color:var(--dim);line-height:1.8">Playwright's built-in <code>page.on('response')</code>
+                    doesn't give request body. CDP gives raw network access.</p>
+                <div class="gotcha">
+                    <div class="gotcha-title">⚠️ Trade-off</div>CDP is Chrome-only. Chose coverage over portability.
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SCHEMA -->
+    <section>
+        <div class="section-number">04 // SCHEMA INFERENCE</div>
+        <h2 class="fade-in">From Traffic to <span class="gradient-text">OpenAPI Spec</span></h2>
+        <div class="code-section fade-in">
+            <div class="code-block">
+                <div class="code-header">
+                    <div class="dot" style="background:#ff5f56"></div>
+                    <div class="dot" style="background:#ffbd2e"></div>
+                    <div class="dot" style="background:#27ca40"></div><span
+                        class="filename">inference/schema_merger.py</span>
+                </div>
+                <pre><span class="keyword">from</span> genson <span class="keyword">import</span> SchemaBuilder
+
+<span class="comment"># Cluster URLs by pattern</span>
+<span class="string">"/api/pokemon/1"</span>  → <span class="string">"/api/pokemon/{id}"</span>
+
+<span class="comment"># Build schema from examples</span>
+builder = SchemaBuilder()
+builder.add_object({<span class="string">"id"</span>: <span class="number">1</span>, <span class="string">"name"</span>: <span class="string">"bulbasaur"</span>})
+builder.add_object({<span class="string">"id"</span>: <span class="number">25</span>, <span class="string">"name"</span>: <span class="string">"pikachu"</span>})
+schema = builder.to_schema()
+<span class="comment"># {"type":"object","properties":{...}}</span>
+
+<span class="comment"># LLM adds semantic meaning</span>
+enriched = <span class="keyword">await</span> llm.invoke(<span class="string">"Add descriptions..."</span>)</pre>
+            </div>
+            <div>
+                <h3>Why genson?</h3>
+                <p style="color:var(--dim);line-height:1.8">Handles type unions gracefully. <code>"count": 5</code> +
+                    <code>"count": null</code> → <code>{"type": ["integer", "null"]}</code>
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- STORAGE -->
+    <section>
+        <div class="section-number">05 // STORAGE</div>
+        <h2 class="fade-in">Why <span class="gradient-text">3 Different</span> Databases?</h2>
+        <div class="storage-comparison fade-in">
+            <div class="storage-card">
+                <div class="icon">🗄️</div>
+                <h4>SQLite</h4>
+                <div class="purpose">Sessions, Observations</div>
+                <div class="why">ACID transactions, fast indexed queries, persistent</div>
+            </div>
+            <div class="storage-card">
+                <div class="icon">🧠</div>
+                <h4>ChromaDB</h4>
+                <div class="purpose">Vector Embeddings</div>
+                <div class="why">Semantic search: "find similar responses"</div>
+            </div>
+            <div class="storage-card">
+                <div class="icon">⚡</div>
+                <h4>In-Memory</h4>
+                <div class="purpose">Hot Loop State</div>
+                <div class="why">Sub-millisecond confidence updates (1000s/session)</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- STATS -->
+    <section>
+        <div class="section-number">06 // METRICS</div>
+        <h2 class="fade-in">Project <span class="gradient-text">Numbers</span></h2>
+        <div class="stats-grid fade-in">
+            <div class="stat-card">
+                <div class="stat-value counter" data-target="8600">0</div>
+                <div class="stat-label">Lines of Code</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value counter" data-target="6">0</div>
+                <div class="stat-label">Specialized Agents</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value counter" data-target="50">0</div>
+                <div class="stat-label">API Endpoints</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value counter" data-target="3">0</div>
+                <div class="stat-label">Storage Systems</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECURITY -->
+    <section id="security">
+        <div class="section-number">07 // SECURITY</div>
+        <h2 class="fade-in">Automatic <span class="gradient-text">Vulnerability</span> Detection</h2>
+        <div class="security-grid fade-in">
+            <div class="security-finding"><span class="severity high">High</span>
+                <div><strong>JWT Algorithm None</strong>
+                    <p style="color:var(--dim);font-size:0.9rem">Token accepts "alg":"none" - signature bypass</p>
+                </div>
+            </div>
+            <div class="security-finding"><span class="severity medium">Med</span>
+                <div><strong>Missing HSTS</strong>
+                    <p style="color:var(--dim);font-size:0.9rem">Vulnerable to downgrade attacks</p>
+                </div>
+            </div>
+            <div class="security-finding"><span class="severity medium">Med</span>
+                <div><strong>CORS Wildcard</strong>
+                    <p style="color:var(--dim);font-size:0.9rem">Access-Control-Allow-Origin: *</p>
+                </div>
+            </div>
+            <div class="security-finding"><span class="severity low">Low</span>
+                <div><strong>Server Version</strong>
+                    <p style="color:var(--dim);font-size:0.9rem">nginx/1.18.0 in headers</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Q&A -->
+    <section id="qa">
+        <div class="section-number">08 // Q&A</div>
+        <h2 class="fade-in">Questions You <span class="gradient-text">Might Ask</span></h2>
+        <div class="qa-grid fade-in">
+            <div class="qa-item">
+                <div class="question">Why LangGraph over AutoGen? <span class="arr">▼</span></div>
+                <div class="answer">Fine-grained routing control. I can say "if confidence < 0.5, loop back". AutoGen is
+                        for agent conversations. I needed a state machine with conditional edges.</div>
+                </div>
+                <div class="qa-item">
+                    <div class="question">How do you avoid rate limiting? <span class="arr">▼</span></div>
+                    <div class="answer">Configurable delays, exponential backoff on 429s, guardrails limit max requests
+                        per domain. Aggressive exploration can still trigger blocks.</div>
+                </div>
+                <div class="qa-item">
+                    <div class="question">What's the LLM cost per session? <span class="arr">▼</span></div>
+                    <div class="answer">$0.10-0.50 with Gemini 2.0 Flash. ~2-3 LLM calls per iteration. Most tokens go
+                        to Navigator and Analyst.</div>
+                </div>
+                <div class="qa-item">
+                    <div class="question">Can it handle authentication? <span class="arr">▼</span></div>
+                    <div class="answer">Currently detects auth mechanisms (JWT, sessions, API keys) but doesn't bypass.
+                        Future: session cookie injection and OAuth automation.</div>
+                </div>
+            </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+        <h2 class="fade-in">Let's <span class="gradient-text">Tinker</span></h2>
+        <p style="color:var(--dim);margin:1.5rem 0;">Built by Jainam Shah • Machine Learning Engineer</p>
+        <a href="http://localhost:3000" class="cta-button fade-in">View Live Demo →</a>
+    </footer>
+
+    <script>
+        // Scroll animations
+        const observer = new IntersectionObserver(entries => {
+            entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+        }, { threshold: 0.1 });
+        document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+        // Q&A toggle
+        document.querySelectorAll('.qa-item .question').forEach(q => {
+            q.addEventListener('click', () => q.parentElement.classList.toggle('open'));
+        });
+
+        // Counter animation
+        const counters = document.querySelectorAll('.counter');
+        const countObserver = new IntersectionObserver(entries => {
+            entries.forEach(e => {
+                if (e.isIntersecting) {
+                    const target = +e.target.dataset.target;
+                    let count = 0;
+                    const increment = target / 50;
+                    const update = () => {
+                        count += increment;
+                        e.target.textContent = Math.ceil(count) + (target > 100 ? '+' : '');
+                        if (count < target) requestAnimationFrame(update);
+                    };
+                    update();
+                    countObserver.unobserve(e.target);
+                }
+            });
+        });
+        // Keyboard scroll controls
+        document.addEventListener('keydown', e => {
+            if (e.key === 'ArrowDown' || e.key === ' ') {
+                e.preventDefault();
+                window.scrollBy({ top: window.innerHeight * 0.85, behavior: 'smooth' });
+            }
+            if (e.key === 'ArrowUp') {
+                e.preventDefault();
+                window.scrollBy({ top: -window.innerHeight * 0.85, behavior: 'smooth' });
+            }
+        });
+    </script>
+</body>
+
+</html>
