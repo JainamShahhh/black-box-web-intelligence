@@ -1128,7 +1128,8 @@
             <div class="definition-box">
                 <div class="def-term">5️⃣ Verifier</div>
                 <div class="def-meaning">Actually sends HTTP requests to test the Critic's questions. Reports
-                    <em>success/failure</em> with evidence.</div>
+                    <em>success/failure</em> with evidence.
+                </div>
             </div>
             <div class="definition-box">
                 <div class="def-term">6️⃣ Memory</div>
@@ -1343,17 +1344,23 @@ enriched = <span class="keyword">await</span> llm.invoke(<span class="string">"A
                 if (e.isIntersecting) {
                     const target = +e.target.dataset.target;
                     let count = 0;
-                    const increment = target / 50;
+                    const increment = target / 40;
                     const update = () => {
                         count += increment;
-                        e.target.textContent = Math.ceil(count) + (target > 100 ? '+' : '');
-                        if (count < target) requestAnimationFrame(update);
+                        if (count < target) {
+                            e.target.textContent = Math.ceil(count) + (target > 100 ? '+' : '');
+                            requestAnimationFrame(update);
+                        } else {
+                            e.target.textContent = target + (target > 100 ? '+' : '');
+                        }
                     };
                     update();
                     countObserver.unobserve(e.target);
                 }
             });
-        });
+        }, { threshold: 0.5 });
+        counters.forEach(c => countObserver.observe(c));
+
         // Keyboard scroll controls
         document.addEventListener('keydown', e => {
             if (e.key === 'ArrowDown' || e.key === ' ') {
