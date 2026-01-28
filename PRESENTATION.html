@@ -852,6 +852,49 @@
             transform: rotate(180deg);
         }
 
+        /* QR Code Grid */
+        .qr-grid {
+            display: flex;
+            justify-content: center;
+            gap: 3rem;
+            margin: 2rem 0;
+            flex-wrap: wrap;
+        }
+
+        .qr-card {
+            background: var(--card);
+            border: 1px solid rgba(0, 255, 213, 0.2);
+            border-radius: 16px;
+            padding: 1.5rem;
+            text-align: center;
+            transition: all 0.3s;
+        }
+
+        .qr-card:hover {
+            transform: translateY(-10px);
+            border-color: var(--cyan);
+            box-shadow: 0 20px 40px rgba(0, 255, 213, 0.15);
+        }
+
+        .qr-card img {
+            width: 150px;
+            height: 150px;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+        }
+
+        .qr-label {
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: var(--text);
+            margin-bottom: 0.25rem;
+        }
+
+        .qr-url {
+            font-size: 0.85rem;
+            color: var(--dim);
+        }
+
         /* Footer */
         footer {
             padding: 4rem 5%;
@@ -1320,9 +1363,32 @@ enriched = <span class="keyword">await</span> llm.invoke(<span class="string">"A
 
     <!-- FOOTER -->
     <footer>
-        <h2 class="fade-in">Let's <span class="gradient-text">Tinker</span></h2>
+        <h2 class="fade-in">Let's <span class="gradient-text">Connect</span></h2>
         <p style="color:var(--dim);margin:1.5rem 0;">Built by Jainam Shah • Machine Learning Engineer</p>
-        <a href="http://localhost:3000" class="cta-button fade-in">View Live Demo →</a>
+
+        <!-- QR Codes -->
+        <div class="qr-grid fade-in">
+            <div class="qr-card">
+                <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://github.com/JainamShahhh/black-box-web-intelligence&bgcolor=12121a&color=00ffd5"
+                    alt="GitHub QR">
+                <div class="qr-label">📂 GitHub Repo</div>
+                <div class="qr-url">Source Code</div>
+            </div>
+            <div class="qr-card">
+                <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://www.linkedin.com/in/jainamshahh/&bgcolor=12121a&color=00ffd5"
+                    alt="LinkedIn QR">
+                <div class="qr-label">💼 LinkedIn</div>
+                <div class="qr-url">Connect with me</div>
+            </div>
+            <div class="qr-card">
+                <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://drive.google.com/file/d/10aEmQpX_JqmRxeDrdSRQII9_nDWvYeTl/view?usp=sharing&bgcolor=12121a&color=00ffd5"
+                    alt="Resume QR">
+                <div class="qr-label">📄 Resume</div>
+                <div class="qr-url">My Experience</div>
+            </div>
+        </div>
+
+        <a href="http://localhost:3000" class="cta-button fade-in" style="margin-top:2rem;">View Live Demo →</a>
     </footer>
 
     <script>
