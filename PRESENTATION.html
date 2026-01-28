@@ -389,6 +389,100 @@
             transform: scale(1.2) rotate(10deg);
         }
 
+        /* Definition boxes */
+        .definition-row {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .definition-box {
+            background: linear-gradient(135deg, rgba(0, 255, 213, 0.1), rgba(168, 85, 247, 0.1));
+            border: 1px solid rgba(0, 255, 213, 0.3);
+            border-radius: 12px;
+            padding: 1.5rem;
+            transition: all 0.3s;
+        }
+
+        .definition-box:hover {
+            transform: translateY(-5px);
+            border-color: var(--cyan);
+        }
+
+        .def-term {
+            font-weight: 700;
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+            color: var(--cyan);
+        }
+
+        .def-meaning {
+            color: var(--dim);
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+
+        .def-meaning em {
+            color: var(--text);
+            font-style: normal;
+            background: rgba(0, 255, 213, 0.2);
+            padding: 0.1rem 0.3rem;
+            border-radius: 3px;
+        }
+
+        /* Explanation callouts */
+        .explanation-box {
+            background: var(--card);
+            border-left: 4px solid var(--cyan);
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            border-radius: 0 12px 12px 0;
+        }
+
+        .explanation-box h4 {
+            color: var(--cyan);
+            margin-bottom: 0.5rem;
+            font-size: 1rem;
+        }
+
+        .explanation-box p {
+            color: var(--dim);
+            line-height: 1.7;
+            font-size: 0.95rem;
+        }
+
+        /* Analogy box */
+        .analogy-box {
+            background: rgba(168, 85, 247, 0.1);
+            border: 1px solid rgba(168, 85, 247, 0.3);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .analogy-box .emoji {
+            font-size: 2.5rem;
+        }
+
+        .analogy-box .text {
+            color: var(--dim);
+            line-height: 1.6;
+        }
+
+        .analogy-box .text strong {
+            color: var(--purple);
+        }
+
+        @media (max-width: 768px) {
+            .definition-row {
+                grid-template-columns: 1fr;
+            }
+        }
+
         /* Architecture */
         .architecture-diagram {
             background: var(--card);
@@ -904,6 +998,28 @@
         <h2 class="fade-in">Black-Box API Reverse Engineering</h2>
         <p class="subtitle fade-in">Given just a URL—no source code, no docs—can an AI figure out the entire backend?
         </p>
+
+        <!-- Definition boxes -->
+        <div class="definition-row fade-in">
+            <div class="definition-box">
+                <div class="def-term">🔌 API</div>
+                <div class="def-meaning">How programs talk to each other. When you click a button, your browser sends a
+                    <em>request</em> to a server and gets a <em>response</em> back.
+                </div>
+            </div>
+            <div class="definition-box">
+                <div class="def-term">⬛ Black-Box</div>
+                <div class="def-meaning">You can't see inside—only observe inputs and outputs. Like figuring out a
+                    recipe by tasting the dish, not reading the cookbook.</div>
+            </div>
+            <div class="definition-box">
+                <div class="def-term">🤖 AI Agent</div>
+                <div class="def-meaning">An AI that takes actions, not just answers questions. Instead of saying "click
+                    login", it <em>actually clicks</em> the button.</div>
+            </div>
+        </div>
+
+        <h3 style="margin-top:2rem;color:var(--text)" class="fade-in">What We Want to Discover:</h3>
         <div class="problem-grid fade-in">
             <div class="problem-card">
                 <div class="icon">🔍</div>
@@ -934,39 +1050,48 @@
         <h2 class="fade-in">The Agentic <span class="gradient-text">Scientific Loop</span></h2>
         <p class="subtitle fade-in">Six phases, six agents. It's the scientific method—form hypotheses, test them,
             update beliefs.</p>
+
+        <div class="analogy-box fade-in">
+            <div class="emoji">🔬</div>
+            <div class="text">
+                <strong>Think of it like a scientist:</strong> Make a guess (hypothesis), run an experiment (probe),
+                observe results, update your theory. Repeat until confident!
+            </div>
+        </div>
+
         <div class="architecture-diagram fade-in">
             <div class="loop-container">
-                <div class="phase-box">
+                <div class="phase-box" title="Click through the UI to trigger API calls">
                     <div class="number">1</div>
                     <div class="name">EXPLORE</div>
                     <div class="agent">Navigator</div>
                 </div>
                 <div class="arrow">→</div>
-                <div class="phase-box">
+                <div class="phase-box" title="Capture network traffic via CDP">
                     <div class="number">2</div>
                     <div class="name">OBSERVE</div>
                     <div class="agent">Interceptor</div>
                 </div>
                 <div class="arrow">→</div>
-                <div class="phase-box">
+                <div class="phase-box" title="Build schemas from observed data">
                     <div class="number">3</div>
                     <div class="name">INFER</div>
                     <div class="agent">Analyst</div>
                 </div>
                 <div class="arrow">→</div>
-                <div class="phase-box">
+                <div class="phase-box" title="Challenge hypotheses, find weaknesses">
                     <div class="number">4</div>
                     <div class="name">CRITIQUE</div>
                     <div class="agent">Critic</div>
                 </div>
                 <div class="arrow">→</div>
-                <div class="phase-box">
+                <div class="phase-box" title="Test edge cases with real requests">
                     <div class="number">5</div>
                     <div class="name">PROBE</div>
                     <div class="agent">Verifier</div>
                 </div>
                 <div class="arrow">→</div>
-                <div class="phase-box">
+                <div class="phase-box" title="Store findings, update confidence">
                     <div class="number">6</div>
                     <div class="name">UPDATE</div>
                     <div class="agent">Memory</div>
@@ -974,6 +1099,42 @@
             </div>
             <p style="text-align:center;color:var(--dim);margin-top:2rem;">↻ Loops until confidence converges (20-50
                 iterations)</p>
+        </div>
+
+        <!-- Phase explanations -->
+        <div class="definition-row fade-in" style="margin-top:2rem;">
+            <div class="definition-box">
+                <div class="def-term">1️⃣ Navigator</div>
+                <div class="def-meaning">Uses LLM to decide what to click. Sees the <em>accessibility tree</em> (what
+                    screen readers see) and picks unexplored elements.</div>
+            </div>
+            <div class="definition-box">
+                <div class="def-term">2️⃣ Interceptor</div>
+                <div class="def-meaning">Captures every HTTP request via <em>Chrome DevTools Protocol</em>. Gets URL,
+                    headers, body, status code.</div>
+            </div>
+            <div class="definition-box">
+                <div class="def-term">3️⃣ Analyst</div>
+                <div class="def-meaning">Clusters similar URLs into patterns. Builds <em>JSON schemas</em> from examples
+                    using genson library.</div>
+            </div>
+        </div>
+        <div class="definition-row fade-in">
+            <div class="definition-box">
+                <div class="def-term">4️⃣ Critic</div>
+                <div class="def-meaning">Devil's advocate! Asks: "What about <em>edge cases</em>? What if id=-1? What if
+                    not authenticated?"</div>
+            </div>
+            <div class="definition-box">
+                <div class="def-term">5️⃣ Verifier</div>
+                <div class="def-meaning">Actually sends HTTP requests to test the Critic's questions. Reports
+                    <em>success/failure</em> with evidence.</div>
+            </div>
+            <div class="definition-box">
+                <div class="def-term">6️⃣ Memory</div>
+                <div class="def-meaning">Stores findings in <em>SQLite + ChromaDB</em>. Updates confidence scores using
+                    Bayesian-inspired math.</div>
+            </div>
         </div>
     </section>
 
